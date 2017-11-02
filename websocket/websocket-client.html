@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+        <title>WebSocket</title>
+    </head>
+
+    <body>
+        <div>
+            <input type="button" id="btnConnection" value="连接" />
+            <input type="button" id="btnClose" value="关闭" />
+            <input type="button" id="btnSend" value="发送" />
+        </div>
+        <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.js"></script>
+        <script type="text/javascript">
+            var socket;
+            if(typeof(WebSocket) == "undefined") {
+                alert("您的浏览器不支持WebSocket");
+            }
+
+            $("#btnConnection").click(function() {
+                //实现化WebSocket对象，指定要连接的服务器地址与端口
+                socket = new WebSocket("ws://127.0.0.1:4001");
+                socket.onopen = function (e) {
+                    console.log('Connection to server opened');
+                }
+                //获得消息事件
+                //关闭事件
+                socket.onmessage = function(msg){
+                    console.log(msg.data);
+                }
+                socket.onclose = function() {
+                    console.log("Socket已关闭");
+                };
+                //发生了错误事件
+                socket.onerror = function() {
+                    console.log("发生了错误");
+                }
+            });
+            
+            //发送消息
+            $("#btnSend").click(function() {
+                socket.send("123456");
+            });
+            
+            //关闭
+            $("#btnClose").click(function() {
+                socket.close();
+            });
+        </script>
+    </body>
+
+</html>
